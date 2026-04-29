@@ -22,7 +22,7 @@ def override_get_db():
         db.close()
 
 
-@pytest.fixture(autouse=True)
+@pytest.fixture(autouse=False)
 def setup_db():
     Base.metadata.create_all(bind=engine)
     app.dependency_overrides[get_db] = override_get_db
@@ -32,7 +32,7 @@ def setup_db():
 
 
 @pytest.fixture
-def client():
+def client(setup_db):
     return TestClient(app)
 
 
