@@ -11,10 +11,10 @@ router = APIRouter(prefix="/cases", tags=["cases"])
 
 
 def _require_auth(authorization: str = Header(...), db: Session = Depends(get_db)):
-    if not authorization.startswith("Bearer "):
+    parts = authorization.split(" ", 1)
+    if len(parts) != 2 or parts[0] != "Bearer" or not parts[1]:
         raise HTTPException(status_code=401, detail="Token inválido")
-    token = authorization.split(" ", 1)[1]
-    return get_current_user(token, db)
+    return get_current_user(parts[1], db)
 
 
 @router.get("/", response_model=list[CaseOut])
@@ -68,5 +68,6 @@ def update_case_status(
         raise HTTPException(status_code=404, detail="Caso não encontrado")
 
     case.status = body.status
+    db.add(case)
     db.commit()
     return {"status": "updated", "case_id": case_id, "new_status": body.status}
