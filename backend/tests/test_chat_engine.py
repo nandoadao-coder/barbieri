@@ -11,7 +11,9 @@ def make_engine():
 def test_divorce_fields_all_present():
     assert "author_name" in DIVORCE_FIELDS
     assert "author_cpf" in DIVORCE_FIELDS
+    assert "author_address" in DIVORCE_FIELDS
     assert "defendant_name" in DIVORCE_FIELDS
+    assert "defendant_cpf" in DIVORCE_FIELDS
     assert "marriage_date" in DIVORCE_FIELDS
     assert "marriage_regime" in DIVORCE_FIELDS
     assert "has_children" in DIVORCE_FIELDS
