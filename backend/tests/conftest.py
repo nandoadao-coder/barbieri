@@ -46,7 +46,7 @@ def db():
 
 
 @pytest.fixture
-def lawyer_user(db):
+def lawyer_user(setup_db, db):
     user = User(
         email="advogado@test.com",
         hashed_password=pwd_context.hash("senha123"),
