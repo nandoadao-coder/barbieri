@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timezone
 from sqlalchemy import Integer, ForeignKey, String, DateTime
 from sqlalchemy.dialects.postgresql import JSONB
 from sqlalchemy.orm import Mapped, mapped_column
@@ -13,7 +13,7 @@ class ChatSession(Base):
     client_id: Mapped[int | None] = mapped_column(Integer, ForeignKey("clients.id"))
     channel: Mapped[str] = mapped_column(String(20))  # whatsapp | web
     channel_id: Mapped[str | None] = mapped_column(String(100))  # phone number or session token
-    history: Mapped[list] = mapped_column(JSONB, default=list)  # [{role, content}]
+    history: Mapped[list] = mapped_column(JSONB, default=list, server_default='[]')  # [{role, content}]
     current_step: Mapped[str | None] = mapped_column(String(100))  # qual dado está coletando
-    created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
-    updated_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+    created_at: Mapped[datetime] = mapped_column(DateTime, default=lambda: datetime.now(timezone.utc))
+    updated_at: Mapped[datetime] = mapped_column(DateTime, default=lambda: datetime.now(timezone.utc), onupdate=lambda: datetime.now(timezone.utc))
